@@ -1,12 +1,12 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "gptrends-cloudflare-worker",
+	"name": "siteline-cloudflare-worker",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-12-05",
 	"observability": {
 		"enabled": true
 	},
 	"vars": {
-		"GPTRENDS_API_URL": "https://api.gptrends.io/v1/intake/pageview"
+		"SITELINE_API_URL": "https://api.siteline.ai/v1/intake/pageview"
 	}
 }
