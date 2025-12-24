@@ -1,13 +1,14 @@
 /**
- * Cloudflare Worker for GPTrends Bot Tracking
+ * Cloudflare Worker for Siteline Bot Tracking
  *
  * Automatically tracks AI bot visits (ChatGPT, Claude, etc.) by forwarding
- * request data to GPTrends API. Runs as middleware with zero impact on response time.
+ * request data to Siteline API. Runs as middleware with zero impact on response time.
  */
 
+import { Siteline } from '@siteline/core';
+
 export interface Env {
-	GPTRENDS_WEBSITE_KEY: string;
-	GPTRENDS_API_URL: string;
+	SITELINE_WEBSITE_KEY: string;
 }
 
 const SKIP_PATTERN = /\.(css|js|jpe?g|png|gif|svg|webp|ico|woff2?|ttf|mp4|webm|pdf|zip|tar|gz)$/i;
@@ -41,33 +42,29 @@ function shouldTrack(req: Request): boolean {
 }
 
 async function track(req: Request, status: number, duration: number, env: Env): Promise<void> {
-	if (!env.GPTRENDS_API_URL || !env.GPTRENDS_WEBSITE_KEY) {
-		console.error('GPTrends: Missing required environment variables');
+	if (!env.SITELINE_WEBSITE_KEY) {
+		console.error('Siteline: Missing SITELINE_WEBSITE_KEY environment variable');
 		return;
 	}
 
 	try {
-		await fetch(env.GPTRENDS_API_URL, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				url: req.url,
-				method: req.method,
-				userAgent: req.headers.get('user-agent') || '',
-				ref: req.headers.get('referer') || '',
-				ip: req.headers.get('cf-connecting-ip') || '',
-				status,
-				duration: Math.round(duration),
-				websiteKey: env.GPTRENDS_WEBSITE_KEY,
-				integration_type: 'cloudflare-worker',
-				sdk: 'gptrends-cloudflare-worker',
-				sdk_version: '1.1.0',
-			}),
-			signal: AbortSignal.timeout(5000)
+		const siteline = new Siteline({
+			websiteKey: env.SITELINE_WEBSITE_KEY,
+			sdk: '@siteline/cloudflare-worker',
+			sdkVersion: '1.0.1',
+			integrationType: 'cloudflare-worker',
+		});
+
+		siteline.track({
+			url: req.url,
+			method: req.method,
+			status,
+			duration: Math.round(duration),
+			userAgent: req.headers.get('user-agent') || '',
+			ref: req.headers.get('referer') || '',
+			ip: req.headers.get('cf-connecting-ip') || '',
 		});
 	} catch (error) {
-		console.error('GPTrends tracking failed:', error);
+		console.error('Siteline tracking failed:', error);
 	}
 }

@@ -1,6 +1,6 @@
 {
-	"name": "gptrends-cloudflare-worker",
-	"version": "1.0.0",
+	"name": "@siteline/cloudflare-worker",
+	"version": "1.0.1",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
@@ -8,6 +8,9 @@
 		"start": "wrangler dev",
 		"test": "vitest",
 		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@siteline/core": "^1.0.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.8.19",

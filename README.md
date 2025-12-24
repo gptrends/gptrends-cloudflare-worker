@@ -1,4 +1,4 @@
-# GPTrends Cloudflare Worker
+# Siteline Cloudflare Worker
 
 Automatically track AI bot visits (ChatGPT, Claude, Perplexity, etc.) on your website with zero performance impact.
 
@@ -7,7 +7,7 @@ Automatically track AI bot visits (ChatGPT, Claude, Perplexity, etc.) on your we
 ### Prerequisites
 - Cloudflare account
 - Node.js installed
-- Your GPTrends website key
+- Your Siteline website key
 
 ### Installation Steps
 
@@ -21,9 +21,9 @@ Automatically track AI bot visits (ChatGPT, Claude, Perplexity, etc.) on your we
    npx wrangler login
    ```
 
-3. **Set your GPTrends website key** (secure, never committed to code)
+3. **Set your Siteline website key** (secure, never committed to code)
    ```bash
-   npx wrangler secret put GPTRENDS_WEBSITE_KEY
+   npx wrangler secret put SITELINE_WEBSITE_KEY
    ```
    When prompted, paste your website key and press Enter.
 
@@ -34,11 +34,11 @@ Automatically track AI bot visits (ChatGPT, Claude, Perplexity, etc.) on your we
 
 5. **Configure routes in Cloudflare Dashboard**
 	- Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
-	- Navigate to: **Workers & Pages** > **gptrends-tracker** > **Settings** > **Triggers**
+	- Navigate to: **Workers & Pages** > **siteline-tracker** > **Settings** > **Triggers**
 	- Click **Add route**
 	- Add your domain pattern, for example:
-		- `example.com/*` (tracks all pages)
-		- `*.example.com/*` (tracks all subdomains)
+		- `example.com/*` (tracks all pages for domain)
+		- `*example.com/*` (tracks all subdomains)
 	- Select your zone and save
 
 ## What Gets Tracked
@@ -55,9 +55,9 @@ Static assets (images, CSS, JS, fonts) are automatically excluded.
 ## Configuration
 
 ### Default API URL
-The worker uses `https://api.gptrends.io/track` by default. To change it:
+The worker uses `https://api.siteline.ai/track` by default. To change it:
 ```bash
-npx wrangler secret put GPTRENDS_API_URL
+npx wrangler secret put SITELINE_API_URL
 ```
 
 ### Update the worker
@@ -76,7 +76,7 @@ npx wrangler tail
 The worker runs as middleware on your domain:
 1. Receives incoming request
 2. Forwards request immediately (zero latency impact)
-3. Sends tracking data to GPTrends in the background
+3. Sends tracking data to Siteline in the background
 4. Returns response to visitor
 
 ## Troubleshooting
@@ -88,11 +88,11 @@ The worker runs as middleware on your domain:
 
 **Need to change your website key?**
 ```bash
-npx wrangler secret put GPTRENDS_WEBSITE_KEY
+npx wrangler secret put SITELINE_WEBSITE_KEY
 ```
 
 ## Support
 
-For issues or questions about GPTrends, visit [gptrends.io](https://gptrends.io)
+For issues or questions about Siteline, visit [siteline.ai](https://siteline.ai)
 
 For Cloudflare Workers issues, see the [official documentation](https://developers.cloudflare.com/workers/)
